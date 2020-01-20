@@ -11,6 +11,7 @@ using System.Web;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Diary_Proj.Repositories;
 
 namespace Diary_Proj.Controllers
 {
@@ -18,11 +19,13 @@ namespace Diary_Proj.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _appEnvironment;
+        private readonly INoteRepository _noteRepository;
 
-        public NoteController(AppDbContext context, IWebHostEnvironment appEnvironment)
+        public NoteController(AppDbContext context, IWebHostEnvironment appEnvironment, INoteRepository noteRepository)
         {
             _context = context;
             _appEnvironment = appEnvironment;
+            _noteRepository = noteRepository;
         }
 
         // GET: Note
@@ -60,10 +63,12 @@ namespace Diary_Proj.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Note noteModel)
+        public async Task<IActionResult> Create(NoteViewModel noteModel)
         {
             if (ModelState.IsValid)
             {
+                string uniqName = string.Empty;
+                uniqName = await UploadImage(noteModel);
 
                 Note note = new Note
                 {
@@ -71,35 +76,33 @@ namespace Diary_Proj.Controllers
                     Date_FK = noteModel.Date_FK.Date,
                     Title = noteModel.Title,
                     Text = noteModel.Text,
-                    Pic = noteModel.Pic,
-                    StartAt = noteModel.StartAt
+                    StartAt = noteModel.StartAt,
+                    Pic = uniqName
                 };
 
-                var img = HttpContext.Request.Form.Files.FirstOrDefault();
-                var upload = Path.Combine(_appEnvironment.WebRootPath, "images");
-                var filePath = Path.Combine(upload, img.FileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create)) 
-                {
-                    await img.CopyToAsync(fileStream);
-                    note.Pic = filePath;
-                }
-
-                if (IsDayExsts(noteModel.Date_FK))
-                {
-                    _context.Notes.Add(note);
-                }
-                else
-                {
-                    DayNote dayNote = new DayNote { Date = noteModel.Date_FK.Date };
-                    dayNote.Notes.Add(note);
-                    _context.Add(dayNote);
-                }
-                
-                await _context.SaveChangesAsync();
+                await _noteRepository.AddNote(note);
                 return RedirectToAction(nameof(Index));
             }
             return View(noteModel);
+        }
+
+        private async Task<string> UploadImage(NoteViewModel noteModel)
+        {
+            string uniqName = string.Empty;
+            if (noteModel.Pic != null)
+            {
+                var uploadFolderPath = Path.Combine(_appEnvironment.WebRootPath, "images");
+
+// Create Unique name to ensure that no conflict will happen if the same image is upladed again
+                uniqName = Guid.NewGuid().ToString() + "_" + noteModel.Pic.FileName;
+                var filePath = Path.Combine(uploadFolderPath, uniqName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await noteModel.Pic.CopyToAsync(fileStream);
+                }
+            }
+
+            return uniqName;
         }
 
         // GET: Note/Edit/5

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    var imagePath = "images/";
 }
 
 <h1>Index</h1>
@@ -28,27 +29,30 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Text)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartAt)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Pic)
-            </td>*@
-            <img src ="@item.Pic" width="50px" height="50px"/>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartAt)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Pic)
+                    </td>*@
+                <td>
+                    <img src="@imagePath@item.Pic" width="50px" height="50px" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

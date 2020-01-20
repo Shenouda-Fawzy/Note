@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,5 +21,6 @@ namespace Diary_Proj.Models
 
         public String PicPath { get; set; }
         public DateTime Date_FK { get; set; }
+        public IFormFile Pic { get; set; }
     }
 }

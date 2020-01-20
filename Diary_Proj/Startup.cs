@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Diary_Proj.Data;
+using Diary_Proj.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ namespace Diary_Proj
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DiaryDBConn"));
             });
+            services.AddScoped<INoteRepository, NoteRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,49 +10,55 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Text)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pic)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Text)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartAt)
-                </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Pic)
-                    </td>*@
-                <td>
-                    <img src="@imagePath@item.Pic" width="50px" height="50px" />
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+@foreach (var item in Model)
+{
+    <div class="container col-md-7">
+        
+            <div class="card text-center">
+                <div class="card border-primary mb-3">
+                    <h3 class="card card-header bg-success text-white">
+                        @item.Title
+                    </h3>
+
+                    <div class="card-body">
+                        <p class="card card-text">
+                            @item.Text
+                        </p>
+
+                        @{
+                            if (item.Pic != "")
+                            {
+                                <div class="card card-img">
+                                    <img src="@imagePath@item.Pic" class="card-img-bottom figure-img" alt="Card image cap" />
+                                </div>
+                            }
+                        }
+
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-primary m-3">Edit Note</a>
+
+                        <div class="card-footer text-muted">
+                            @*Start at: @item.StartAt.Value*@
+                            @{
+                                DateTime time = new DateTime();
+                                time += item.StartAt.Value;
+
+                             }
+                            Start at: @time.ToShortTimeString()
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        
+
+    </div>
+    
+
+    @*<a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>*@
+
+}

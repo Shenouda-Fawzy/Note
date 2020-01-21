@@ -18,6 +18,7 @@ namespace Diary_Proj.Models
 
         public String Text { get; set; } = String.Empty;
 
+        [Required(ErrorMessage = "Please enter the end time")]
         public TimeSpan? StartAt { get; set; } = default;
 
         public String PicPath { get; set; } = "";

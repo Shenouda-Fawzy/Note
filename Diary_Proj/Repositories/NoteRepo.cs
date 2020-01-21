@@ -42,7 +42,7 @@ namespace Diary_Proj.Repositories
             return result;
         }
 
-        private  bool IsDayExsts(DateTime date)
+        public  bool IsDayExsts(DateTime date)
         {
             return  _context.DayNotes.Any(d => d.Date.Date == date.Date);
         }

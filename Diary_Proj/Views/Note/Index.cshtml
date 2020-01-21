@@ -5,7 +5,7 @@
     var imagePath = "images/";
 }
 
-<h1>Index</h1>
+<h4 class="text-primary">Notes</h4>
 
 <div class="alert alert-primary text-center">
     <a asp-action="Create" class="btn btn-primary">New Note</a>
@@ -50,6 +50,7 @@
     }
     String style = "bg-success";
     var date = item.DayNote.Date;
+   
     DateTime stored = new DateTime(date.Year, date.Month, date.Day,
         item.StartAt.Value.Hours, item.StartAt.Value.Minutes, item.StartAt.Value.Seconds);
 
@@ -87,7 +88,7 @@
                             if (item.StartAt != null)
                             {
                                 time += item.StartAt.Value;
-                                <span class="badge badge-info">Start at: @time.ToShortTimeString()</span>
+                                <span class="badge badge-info">Ends at: @time.ToShortTimeString()</span>
                             }
 
                         }

@@ -144,7 +144,7 @@ namespace Diary_Proj.Controllers
             {
                 try
                 {
-                    if (!IsDayExsts(noteViewModel.Date_FK.Date))
+                    if (!_noteRepository.IsDayExsts(noteViewModel.Date_FK.Date))
                     {
                         DayNote dayNote = new DayNote();
                         dayNote.Date = noteViewModel.Date_FK;
@@ -200,11 +200,6 @@ namespace Diary_Proj.Controllers
         private bool NoteExists(int id)
         {
             return _context.Notes.Any(e => e.ID == id);
-        }
-
-        private bool IsDayExsts(DateTime date) 
-        {
-            return _context.DayNotes.Any(d => d.Date.Date == date.Date);
         }
 
         private Note CopyPOCOFromVM(NoteViewModel vm) 

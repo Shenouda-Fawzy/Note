@@ -31,5 +31,7 @@ namespace Diary_Proj.Repositories
         /// <param name="date">Date which we want to retrive all notes attached to it</param>
         /// <returns>A collection of Notes on a single day</returns>
         ICollection<Note> GetNotesOfDay(DateTime date);
+
+        public bool IsDayExsts(DateTime date);
     }
 }

@@ -31,7 +31,15 @@ namespace Diary_Proj.Controllers
         // GET: Note
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Notes.ToListAsync());
+            List<DayNote> dayNote = _context.DayNotes.OrderBy(d => d.Date).ToList();
+            List<Note> notes = new List<Note>();
+            foreach (var day in dayNote)
+            {
+                notes.AddRange(_noteRepository.GetNotesOfDay(day.Date));
+            }
+
+            //var allNotes = _noteRepository.GetNotesOfDay(new DateTime(2021, 2, 2));
+            return View(notes);
         }
 
         // GET: Note/Details/5

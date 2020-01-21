@@ -7,55 +7,92 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="alert alert-primary text-center">
+    <a asp-action="Create" class="btn btn-primary">New Note</a>
+</div>
+
+@{
+    DateTime prevDate = default;
+    DateTime currentDate = default;
+    Note note = Model.FirstOrDefault();
+    bool isSameDate = false;
+
+    if (note != null) {
+        prevDate = note.Date_FK.Date;
+        currentDate = note.Date_FK.Date;
+    }
+}
 
 @foreach (var item in Model)
 {
+    prevDate = currentDate;
+    currentDate = @item.Date_FK.Date;
+
+    if (currentDate != prevDate)
+        isSameDate = !isSameDate;
+
+    if (isSameDate == true)
+    {
+        <div class="alert alert-secondary col-10" role="alert">
+            @item.Date_FK.Date.ToShortDateString()
+        </div>
+    }
+    else
+    {
+        //currentDate = prevDate;
+        <div class="alert alert-info col-10" role="alert">
+            @item.Date_FK.Date.ToShortDateString()
+        </div>
+    }
+    
+
+
+    
+    
+
     <div class="container col-md-7">
-        
-            <div class="card text-center">
-                <div class="card border-primary mb-3">
-                    <h3 class="card card-header bg-success text-white">
-                        @item.Title
-                    </h3>
 
-                    <div class="card-body">
-                        <p class="card card-text">
-                            @item.Text
-                        </p>
+        <div class="card text-center m-3">
+            <div class="card">
+                <h3 class="card card-header bg-success text-white">
+                    @item.Title
+                </h3>
 
-                        @{
-                            if (item.Pic != "")
-                            {
-                                <div class="card card-img">
-                                    <img src="@imagePath@item.Pic" class="card-img-bottom figure-img" alt="Card image cap" />
-                                </div>
-                            }
+                <div class="card-body">
+                    <p class="card card-text bg-light">
+                        @item.Text
+                    </p>
+
+                    @{
+                        if (item.Pic != "")
+                        {
+                            <div class="card card-img">
+                                <img src="@imagePath@item.Pic" class="card-img-bottom figure-img" alt="Card image cap" />
+                            </div>
                         }
+                    }
 
-                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-primary m-3">Edit Note</a>
+                    <div class="card-text">
+                        @*Start at: @item.StartAt.Value*@
+                        @{
+                            DateTime time = new DateTime();
+                            time += item.StartAt.Value;
 
-                        <div class="card-footer text-muted">
-                            @*Start at: @item.StartAt.Value*@
-                            @{
-                                DateTime time = new DateTime();
-                                time += item.StartAt.Value;
+                        }
+                        <span class="badge badge-info">Start at: @time.ToShortTimeString()</span>
 
-                             }
-                            Start at: @time.ToShortTimeString()
-                        </div>
                     </div>
-
-
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning m-3 float-right">Edit Note</a>
                 </div>
-            </div>
 
-        
+
+            </div>
+        </div>
+
+
 
     </div>
-    
+
 
     @*<a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
         <a asp-action="Details" asp-route-id="@item.ID">Details</a> |

@@ -30,6 +30,6 @@ namespace Diary_Proj.Repositories
         /// </summary>
         /// <param name="date">Date which we want to retrive all notes attached to it</param>
         /// <returns>A collection of Notes on a single day</returns>
-        Task<ICollection<Note>> GetNotesOfDay(DateTime date);
+        ICollection<Note> GetNotesOfDay(DateTime date);
     }
 }

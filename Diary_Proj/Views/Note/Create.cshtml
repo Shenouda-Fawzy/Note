@@ -4,42 +4,56 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Note</h4>
+<h4 class="text-success">Create Note</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+<div class="container col-md-7">
+    <div class="card m-3 border border-success">
+        <form asp-action="Create" enctype="multipart/form-data" class="m-2">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Date_FK" class="control-label">Pik day</label>
-                <input asp-for="Date_FK" type="date" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
+            <div class="form-group card-header bg-success">
+                <h3 class="control-label text-white">Title</h3>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" class="form-control" />
+
+            <div class="form-group card-text">
+                <span class="control-label text-info">Text</span>
+                <textarea name="Text" class="form-control" rows="7"></textarea>
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="StartAt" class="control-label">Task Start at</label>
+
+            <div class="form-group card-text">
+                <span class="control-label text-info" style="font-family:Verdana">Pick day</span>
+                <input asp-for="Date_FK" type="date" class="form-control" />
+                <span asp-validation-for="Date_FK" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group card-text">
+                <span class="control-label text-info">Task Start At</span>
                 <input type="time" name="StartAt" class="form-control" />
                 <span asp-validation-for="StartAt" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Pic" class="control-label"></label>
-                <input asp-for="Pic" type="file" class="form-control" />
-                <span asp-validation-for="Pic" class="text-danger"></span>
+                @*<h5 class="control-label text-info">Attatch Image</h5>
+            <input asp-for="Pic" type="file" class="form-control custom-file-input" />
+            <span asp-validation-for="Pic" class="text-danger"></span>*@
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                        <input asp-for="Pic" type="file" class="custom-file-input form-control">
+                        <label class="custom-file-label">Choose file</label>
+                        <span asp-validation-for="Pic" class="text-danger"></span>
+                    </div>
+                </div>
+
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save Note" class="btn btn-primary" />
             </div>
         </form>
     </div>

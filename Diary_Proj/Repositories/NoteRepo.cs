@@ -35,9 +35,11 @@ namespace Diary_Proj.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<Note>> GetNotesOfDay(DateTime date)
+        public ICollection<Note> GetNotesOfDay(DateTime date)
         {
-            throw new NotImplementedException();
+            var result = _context.Notes.Where(d => d.Date_FK.Date == date.Date).OrderBy(n => n.StartAt).ToList();
+            //var result = _context.Notes.GroupBy(g => g.Date_FK).OrderBy(n => n.StartAt).ToList();
+            return result;
         }
 
         private  bool IsDayExsts(DateTime date)

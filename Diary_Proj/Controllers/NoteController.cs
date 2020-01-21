@@ -42,24 +42,6 @@ namespace Diary_Proj.Controllers
             return View(notes);
         }
 
-        // GET: Note/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var note = await _context.Notes
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (note == null)
-            {
-                return NotFound();
-            }
-
-            return View(note);
-        }
-
         // GET: Note/Create
         public IActionResult Create()
         {

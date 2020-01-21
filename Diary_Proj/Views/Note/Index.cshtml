@@ -72,16 +72,20 @@
                         }
                     }
 
-                    <div class="card-text">
-                        @*Start at: @item.StartAt.Value*@
-                        @{
-                            DateTime time = new DateTime();
+                <div class="card-text">
+                    @*Start at: @item.StartAt.Value*@
+                    @{
+                        DateTime time = new DateTime();
+                        if (item.StartAt != null)
+                        {
                             time += item.StartAt.Value;
-
+                            <span class="badge badge-info">Start at: @time.ToShortTimeString()</span>
                         }
-                        <span class="badge badge-info">Start at: @time.ToShortTimeString()</span>
 
-                    </div>
+                    }
+
+
+                </div>
                     <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning m-3 float-right">Edit Note</a>
                 </div>
 

@@ -75,19 +75,15 @@ namespace Diary_Proj.Controllers
         {
             if (ModelState.IsValid)
             {
+
+// Get Unique name to store it in DB
                 string uniqName = string.Empty;
                 uniqName = await UploadImage(noteModel);
+                noteModel.PicPath = uniqName;
 
-                Note note = new Note
-                {
-                    ID = noteModel.ID,
-                    Date_FK = noteModel.Date_FK.Date,
-                    Title = noteModel.Title,
-                    Text = noteModel.Text,
-                    StartAt = noteModel.StartAt,
-                    Pic = uniqName
-                };
 
+                Note note = CopyPOCOFromVM(noteModel);
+                
                 await _noteRepository.AddNote(note);
                 return RedirectToAction(nameof(Index));
             }
@@ -126,7 +122,10 @@ namespace Diary_Proj.Controllers
             {
                 return NotFound();
             }
-            return View(note);
+
+            NoteViewModel model = CopyViewModelFromPOCO(note);
+
+            return View(model);
         }
 
         // POST: Note/Edit/5
@@ -134,9 +133,9 @@ namespace Diary_Proj.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Text,StartAt,Pic")] Note note)
+        public async Task<IActionResult> Edit(int id, NoteViewModel noteViewModel)
         {
-            if (id != note.ID)
+            if (id != noteViewModel.ID)
             {
                 return NotFound();
             }
@@ -145,12 +144,25 @@ namespace Diary_Proj.Controllers
             {
                 try
                 {
+                    if (!IsDayExsts(noteViewModel.Date_FK.Date))
+                    {
+                        DayNote dayNote = new DayNote();
+                        dayNote.Date = noteViewModel.Date_FK;
+                        _context.DayNotes.Add(dayNote);
+                    }
+// Get Unique name to store it in DB
+                    string uniqName = string.Empty;
+                    uniqName = await UploadImage(noteViewModel);
+                    noteViewModel.PicPath = uniqName;
+
+                    Note note = CopyPOCOFromVM(noteViewModel);
+
                     _context.Update(note);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NoteExists(note.ID))
+                    if (!NoteExists(noteViewModel.ID))
                     {
                         return NotFound();
                     }
@@ -161,7 +173,7 @@ namespace Diary_Proj.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(note);
+            return View(noteViewModel);
         }
 
         // GET: Note/Delete/5
@@ -201,6 +213,34 @@ namespace Diary_Proj.Controllers
         private bool IsDayExsts(DateTime date) 
         {
             return _context.DayNotes.Any(d => d.Date.Date == date.Date);
+        }
+
+        private Note CopyPOCOFromVM(NoteViewModel vm) 
+        {
+            Note note = new Note()
+            {
+                ID = vm.ID,
+                Date_FK = vm.Date_FK.Date,
+                Title = vm.Title,
+                Text = vm.Text,
+                StartAt = vm.StartAt,
+                Pic = vm.PicPath
+            };
+            return note;
+        }
+
+        private NoteViewModel CopyViewModelFromPOCO(Note note) 
+        {
+            NoteViewModel model = new NoteViewModel
+            {
+                ID = note.ID,
+                Date_FK = note.Date_FK,
+                PicPath = note.Pic,
+                StartAt = note.StartAt,
+                Text = note.Text,
+                Title = note.Title
+            };
+            return model;
         }
     }
 }

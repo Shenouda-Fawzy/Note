@@ -35,23 +35,20 @@
                 <input type="time" name="StartAt" class="form-control" />
                 <span asp-validation-for="StartAt" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                @*<h5 class="control-label text-info">Attatch Image</h5>
-            <input asp-for="Pic" type="file" class="form-control custom-file-input" />
-            <span asp-validation-for="Pic" class="text-danger"></span>*@
 
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                    </div>
-                    <div class="custom-file">
-                        <input asp-for="Pic" type="file" class="custom-file-input form-control">
-                        <label class="custom-file-label">Choose file</label>
-                        <span asp-validation-for="Pic" class="text-danger"></span>
-                    </div>
+            <div class="form-group">
+                <label asp-for="Pic" class="control-label text-info"></label>
+                <div class="col-sm-10">
+
+                    <input asp-for="Pic" type="file" class="custom-file-input form-control">
+                    <label class="custom-file-label">Choose file ...</label>
+                    <span asp-validation-for="Pic" class="text-danger"></span>
+
                 </div>
+                <a href="#" class="text-danger col-sm-2" id="rmvPic">Remove Imge</a>    
 
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save Note" class="btn btn-primary" />
             </div>
@@ -65,4 +62,28 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+    console.log('Create loaded');
+    var file = document.querySelector('.custom-file-input');
+    var fileLabel = document.querySelector('.custom-file-label');
+    var remvBtn = document.querySelector('#rmvPic');
+    remvBtn.style.visibility = "hidden";
+
+    remvBtn.addEventListener('click', () => {
+        file.value = "";
+        fileLabel.textContent = "";
+    });
+
+    file.addEventListener('change', (e) => {
+        console.log('changed');
+        console.log(e);
+        if (e != null) {
+            var name = e.srcElement.files[0].name;
+
+            fileLabel.textContent = name;
+            console.log(name);
+            remvBtn.style.visibility = "visible";
+        }
+    });
+</script>
 }

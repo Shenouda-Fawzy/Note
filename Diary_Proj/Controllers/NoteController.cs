@@ -191,15 +191,7 @@ namespace Diary_Proj.Controllers
                 return NotFound();
             }
 
-            return View(note);
-        }
-
-        // POST: Note/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var note = await _context.Notes.FindAsync(id);
+            
             _context.Notes.Remove(note);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

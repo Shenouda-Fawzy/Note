@@ -15,9 +15,10 @@
     DateTime prevDate = default;
     DateTime currentDate = default;
     Note note = Model.FirstOrDefault();
-    bool isSameDate = false;
+    bool isSameDate = true;
 
-    if (note != null) {
+    if (note != null)
+    {
         prevDate = note.Date_FK.Date;
         currentDate = note.Date_FK.Date;
     }
@@ -25,6 +26,9 @@
 
 @foreach (var item in Model)
 {
+   
+
+
     prevDate = currentDate;
     currentDate = @item.Date_FK.Date;
 
@@ -44,19 +48,23 @@
             @item.Date_FK.Date.ToShortDateString()
         </div>
     }
-    
+    String style = "bg-success";
+    var date = item.DayNote.Date;
+    DateTime stored = new DateTime(date.Year, date.Month, date.Day,
+        item.StartAt.Value.Hours, item.StartAt.Value.Minutes, item.StartAt.Value.Seconds);
 
-
-    
-    
+    if (stored < DateTime.Now)
+    {
+        style = "bg-danger";
+    }
 
     <div class="container col-md-7">
 
         <div class="card text-center m-3">
             <div class="card">
-                <h3 class="card card-header bg-success text-white">
+                <h4 class="card card-header @style text-white">
                     @item.Title
-                </h3>
+                </h4>
 
                 <div class="card-body">
                     <p class="card card-text bg-light">
@@ -72,21 +80,23 @@
                         }
                     }
 
-                <div class="card-text">
-                    @*Start at: @item.StartAt.Value*@
-                    @{
-                        DateTime time = new DateTime();
-                        if (item.StartAt != null)
-                        {
-                            time += item.StartAt.Value;
-                            <span class="badge badge-info">Start at: @time.ToShortTimeString()</span>
+                    <div class="card-text">
+                        @*Start at: @item.StartAt.Value*@
+                        @{
+                            DateTime time = new DateTime();
+                            if (item.StartAt != null)
+                            {
+                                time += item.StartAt.Value;
+                                <span class="badge badge-info">Start at: @time.ToShortTimeString()</span>
+                            }
+
                         }
 
-                    }
 
+                    </div>
+                    <a asp-action="Delete" asp-route-id="@item.ID" onclick="clicked(event);" id="delete" class="btn btn-danger m-2 float-right">Remove Note!</a>
 
-                </div>
-                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning m-3 float-right">Edit Note</a>
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning m-2 float-right">Edit Note</a>
                 </div>
 
 
@@ -97,9 +107,17 @@
 
     </div>
 
-
-    @*<a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-        <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>*@
-
 }
+
+@section Scripts{
+<script>
+    console.log('form loaded');
+    function clicked(e) {
+        console.log(e);
+        var res = confirm('are you sure');
+        if (res == false)
+            e.preventDefault();
+    }
+
+</script>
+ }

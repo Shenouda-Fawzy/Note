@@ -30,9 +30,9 @@ namespace Diary_Proj.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Note> GetNote(int id)
+        public async Task<Note> GetNote(int? id)
         {
-            throw new NotImplementedException();
+            return await _context.Notes.FindAsync(id);
         }
 
         public ICollection<Note> GetNotesOfDay(DateTime date)

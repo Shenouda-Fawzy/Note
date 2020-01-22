@@ -99,7 +99,7 @@ namespace Diary_Proj.Controllers
                 return NotFound();
             }
 
-            var note = await _context.Notes.FindAsync(id);
+            var note = await _noteRepository.GetNote(id);
             if (note == null)
             {
                 return NotFound();
@@ -184,6 +184,11 @@ namespace Diary_Proj.Controllers
             return _context.Notes.Any(e => e.ID == id);
         }
 
+        /// <summary>
+        /// This method is for Copying NoteViewModel object to a Note Object.
+        /// </summary>
+        /// <param name="vm">The object that will be copied</param>
+        /// <returns>Note</returns>
         private Note CopyPOCOFromVM(NoteViewModel vm) 
         {
             Note note = new Note()
@@ -198,6 +203,11 @@ namespace Diary_Proj.Controllers
             return note;
         }
 
+        /// <summary>
+        /// This method is for Copying Note object to a NoteViewModel Object.
+        /// </summary>
+        /// <param name="note">The object that will be copied</param>
+        /// <returns>NoteViewModel</returns>
         private NoteViewModel CopyViewModelFromPOCO(Note note) 
         {
             NoteViewModel model = new NoteViewModel

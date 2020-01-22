@@ -13,6 +13,7 @@ namespace Diary_Proj.Models
         {
             Notes = new HashSet<Note>();
         }
+
         [Key]
         [Column(TypeName = "DATE")]
         public DateTime Date { get; set; }

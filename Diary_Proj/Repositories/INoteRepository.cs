@@ -23,7 +23,7 @@ namespace Diary_Proj.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Note</returns>
-        Task<Note> GetNote(int id);
+        Task<Note> GetNote(int? id);
 
         /// <summary>
         /// Get all notes in the spacified <code>Day</code> 
@@ -32,6 +32,11 @@ namespace Diary_Proj.Repositories
         /// <returns>A collection of Notes on a single day</returns>
         ICollection<Note> GetNotesOfDay(DateTime date);
 
+        /// <summary>
+        /// Check if thers is exists a Day in the Data store
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public bool IsDayExsts(DateTime date);
     }
 }
